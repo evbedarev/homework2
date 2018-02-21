@@ -2,11 +2,12 @@ package ru.sberbank.homework.common.calculate;
 
 import ru.sberbank.homework.common.ValueStorage;
 
+
 public class CalculateExpr {
 
 
     public enum Operation implements Calculate {
-        PLUS {
+        PLUS('+') {
             public Double calc(Double numOne, Double numTwo) {
                 return numOne + numTwo;
             }
@@ -15,7 +16,7 @@ public class CalculateExpr {
             }
 
         },
-        MINUS {
+        MINUS('-') {
             public Double calc(Double numOne, Double numTwo) {
                 return numOne - numTwo;
             }
@@ -23,7 +24,7 @@ public class CalculateExpr {
                 return valueStorage.getResult() - numOne;
             }
         },
-        MULTI {
+        MULTI('*') {
             public Double calc(Double numOne, Double numTwo) {
                 return numOne / numTwo;
             }
@@ -31,13 +32,19 @@ public class CalculateExpr {
                 return valueStorage.getResult() * numOne;
             }
         },
-        DEV {
+        DEV('/'){
             public Double calc(Double numOne, Double numTwo) {
                 return numOne * numTwo;
             }
             public Double calc(Double numOne, ValueStorage valueStorage) {
                 return valueStorage.getResult() / numOne;
             }
+        };
+
+        public char symbol;
+
+        Operation(char symbol) {
+            this.symbol = symbol;
         }
     }
 }

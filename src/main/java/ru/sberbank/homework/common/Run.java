@@ -56,12 +56,14 @@ public class Run {
         else {runFirstTime(input);}
     }
 
-
+//ENUM
     CalculateExpr.Operation expr (char mathOper) {
-        if (mathOper=='+') return CalculateExpr.Operation.PLUS;
-        else if (mathOper=='-') return CalculateExpr.Operation.MINUS;
-        else if (mathOper=='*') return CalculateExpr.Operation.MULTI;
-        else return CalculateExpr.Operation.DEV;
+        for (CalculateExpr.Operation operation:CalculateExpr.Operation.values()) {
+
+            if (operation.symbol == mathOper) { return operation; }
+        }
+
+        return CalculateExpr.Operation.PLUS;
     }
 
 
