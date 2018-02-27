@@ -4,32 +4,32 @@ import java.util.regex.Pattern;
 
 public class CheckValue {
 
-    public String[] check (String cmd) {
-
-        String[] groups;
-        Pattern pattern3 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]) ((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?$))");
-        Pattern pattern1 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)).*");
-        Pattern pattern2 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]).*");
-
-
-        groups = retArr(pattern1, 2, cmd, "Error, wrong expr at first number");
-        if (groups[0].matches("Error.*")) {
-            return groups;
-        }
-
-        groups = retArr(pattern2, 3, cmd, "Error, wrong expr at mathematical operation");
-        if (groups[0].matches("Error.*")) {
-            return groups;
-        }
-
-        groups = retArr(pattern3, 4, cmd, "Error, wrong expr at second number");
-        if (groups[0].matches("Error.*")) {
-            return groups;
-        }
-
-        return groups;
-
-    }
+//    public String[] check (String cmd) {
+//
+//        String[] groups;
+//        Pattern pattern3 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]) ((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?$))");
+//        Pattern pattern1 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)).*");
+//        Pattern pattern2 = Pattern.compile("^((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]).*");
+//
+//
+//        groups = retArr(pattern1, 2, cmd, "Error, wrong expr at first number");
+//        if (groups[0].matches("Error.*")) {
+//            return groups;
+//        }
+//
+//        groups = retArr(pattern2, 3, cmd, "Error, wrong expr at mathematical operation");
+//        if (groups[0].matches("Error.*")) {
+//            return groups;
+//        }
+//
+//        groups = retArr(pattern3, 4, cmd, "Error, wrong expr at second number");
+//        if (groups[0].matches("Error.*")) {
+//            return groups;
+//        }
+//
+//        return groups;
+//
+//    }
 
     public String[] checkSecondValue (String cmd) {
         String[] groups;

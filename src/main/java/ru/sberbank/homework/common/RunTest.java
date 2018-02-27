@@ -57,7 +57,6 @@ public class RunTest implements Calculator{
     //ENUM
     CalculateExpr.Operation expr (char mathOper) {
         for (CalculateExpr.Operation operation:CalculateExpr.Operation.values()) {
-
             if (operation.symbol == mathOper) { return operation; }
         }
 

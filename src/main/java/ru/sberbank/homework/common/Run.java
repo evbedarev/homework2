@@ -77,8 +77,4 @@ public class Run {
         else {return new CheckTypeNum();}
     }
 
-
-
-
-
 }
