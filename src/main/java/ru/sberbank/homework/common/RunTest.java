@@ -17,37 +17,44 @@ public class RunTest implements Calculator{
     private String[] arr;
 
     public String calculate (String userInput) {
-
+            valueStorage.setErrorInExpression(null);
             if (valueStorage.getRunAtFirstTime()) {
                 valueStorage.setRunAtFirstTime(false);
                 runFirstTime(userInput);
             } else {runSecondTime(userInput);}
-            return  checkValue.checkZeroAtTheEnd(valueStorage.getResult().toString());
+
+            if (valueStorage.getErrorInExpression()==null) {
+                return checkValue.checkZeroAtTheEnd(valueStorage.getResult().toString());
+            } else {
+                return valueStorage.getErrorInExpression();
+            }
     }
 
     void runFirstTime(String input) {
         arr = checkValue.check(input);
-        if (!(arr[0].matches("Error.*"))) {
+        if (!(arr[0].matches("error.*"))) {
             numOne = checkType(arr[0]).check(arr[0]);
             numTwo = checkType(arr[2]).check(arr[2]);
             mathOper = arr[1].charAt(0);
             valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
-            System.out.println(arr[0] + arr[1] + arr[2] + "=" + valueStorage.getResult());
+            System.out.println(arr[0] + arr[1] + arr[2] + "=" + checkValue.checkZeroAtTheEnd(valueStorage.getResult().toString()));
         } else {
+            valueStorage.setErrorInExpression(arr[0]);
             System.out.println(arr[0]);
         }
     }
 
     void runSecondTime(String input) {
 
-        arr = checkValue.checkSecondValue(input);
-        if (arr[0].matches("[*/+\\-]")) {
-            if (!(arr[0].matches("Error.*"))) {
+        if (input.matches(" ?[*/+\\-].*")) {
+            arr = checkValue.checkSecondValue(input);
+            if (!(arr[0].matches("error.*"))) {
                 numOne = checkType(arr[1]).check(arr[1]);
                 mathOper = arr[0].charAt(0);
                 valueStorage.setResult(expr(mathOper).calc(numOne,valueStorage));
-                System.out.println(valueStorage.getResult() + arr[0] + arr[1] + "=" + valueStorage.getResult());
+                System.out.println(valueStorage.getResult() + arr[0] + arr[1] + "=" + checkValue.checkZeroAtTheEnd(valueStorage.getResult().toString()));
             } else {
+                valueStorage.setErrorInExpression(arr[0]);
                 System.out.println(arr[0]);
             }
         }

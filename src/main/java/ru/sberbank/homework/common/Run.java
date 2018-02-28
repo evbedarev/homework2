@@ -1,6 +1,7 @@
 package ru.sberbank.homework.common;
 import ru.sberbank.homework.common.calculate.*;
 import ru.sberbank.homework.common.checktype.*;
+import sun.plugin.cache.OldCacheEntry;
 
 import java.util.Scanner;
 
@@ -29,26 +30,28 @@ public class Run {
 
     void runFirstTime(String input) {
         arr = checkValue.check(input);
-        if (!(arr[0].matches("Error.*"))) {
+        if (!(arr[0].matches("error.*"))) {
             numOne = checkType(arr[0]).check(arr[0]);
             numTwo = checkType(arr[2]).check(arr[2]);
             mathOper = arr[1].charAt(0);
             valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
             System.out.println(arr[0] + arr[1] + arr[2] + "=" + valueStorage.getResult());
         } else {
+
             System.out.println(arr[0]);
         }
     }
 
     void runSecondTime(String input) {
-
-        arr = checkValue.checkSecondValue(input);
-        if (arr[0].matches("[*/+\\-]")) {
-            if (!(arr[0].matches("Error.*"))) {
+        Double oldValueStorage;
+        if (input.matches(" ?[*/+\\-].*")) {
+            arr = checkValue.checkSecondValue(input);
+            if (!(arr[0].matches("error.*"))) {
                 numOne = checkType(arr[1]).check(arr[1]);
                 mathOper = arr[0].charAt(0);
+                oldValueStorage = valueStorage.getResult();
                 valueStorage.setResult(expr(mathOper).calc(numOne,valueStorage));
-                System.out.println(valueStorage.getResult() + arr[0] + arr[1] + "=" + valueStorage.getResult());
+                System.out.println(oldValueStorage + arr[0] + arr[1] + "=" + valueStorage.getResult());
             } else {
                 System.out.println(arr[0]);
             }

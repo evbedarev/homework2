@@ -3,6 +3,7 @@ package ru.sberbank.homework.common;
 public class ValueStorage {
     private Double result;
     private boolean runAtFirstTime = true;
+    private String errorInExpression = null;
 
    public Double getResult () {
        return result;
@@ -18,6 +19,14 @@ public class ValueStorage {
 
     public boolean getRunAtFirstTime() {
         return runAtFirstTime;
+    }
+
+    public String getErrorInExpression() {
+        return errorInExpression;
+    }
+
+    public void setErrorInExpression(String errorInExpression) {
+        this.errorInExpression = errorInExpression;
     }
 }
 

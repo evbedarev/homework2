@@ -8,7 +8,8 @@ public class SolutionChecker {
 
     private final CommandSequence[] sequences = {
             cs(ex("2 + 2", "4"), ex("- 1", "3"),  ex("* 2", "6"),  ex("/ 4", "1.5"),  ex("1 - 1", "0")), //happy path all operations
-            cs(ex("1+1", "error > wrong expression"), ex("1 - foo", "error > foo")) // неаккуратный пользователь.
+            cs(ex("1+1", "error > wrong expression"), ex("1 - foo", "error > foo")), // неаккуратный пользователь.
+            cs(ex("+1", "error > wrong expression")), cs(ex("+ 1", "1")), cs(ex("+ 0b00001","2"))
             // Остальные тесты пишите сами, своими не поделюсь ;)
     };
 
