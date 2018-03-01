@@ -8,7 +8,7 @@ public class CheckTypeBin extends CheckTypeFloat {
     CheckValue checkValue = new CheckValue();
 
     public Double check(String num) {
-        stringNum = checkValue.retArr(Pattern.compile("0b([01]+)"), num, "Error")[0];
+        stringNum = checkValue.patternCheck(Pattern.compile("0b([01]+)"), num)[0];
         return isMaxValue(Long.parseLong(stringNum,2));
     }
 }
