@@ -7,8 +7,12 @@ import java.util.regex.Pattern;
 public class CheckTypeBin extends CheckTypeFloat {
     CheckValue checkValue = new CheckValue();
 
-    public Double check(String num) {
-        stringNum = checkValue.patternCheck(Pattern.compile("0b([01]+)"), num)[0];
+    public CheckTypeBin(String stringNum) {
+        super(stringNum);
+    }
+
+    public Double check() {
+        stringNum = checkValue.patternCheck(Pattern.compile("0b([01]+)"), stringNum).get(0);
         return isMaxValue(Long.parseLong(stringNum,2));
     }
 }

@@ -2,7 +2,11 @@ package ru.sberbank.homework.common.checktype;
 
 public class CheckTypeNum extends CheckTypeFloat {
 
-    public Double check(String num) {
-        return isMaxValue(Long.parseLong(num,10));
+    public CheckTypeNum(String stringNum) {
+        super(stringNum);
+    }
+
+    public Double check() {
+        return isMaxValue(Long.parseLong(stringNum,10));
     }
 }

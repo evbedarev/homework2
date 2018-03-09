@@ -4,5 +4,4 @@ import ru.sberbank.homework.common.ValueStorage;
 
 public interface Calculate {
      Double calc(Double numOne, Double numTwo);
-     Double calc(Double numOne, ValueStorage valueStorage);
 }
