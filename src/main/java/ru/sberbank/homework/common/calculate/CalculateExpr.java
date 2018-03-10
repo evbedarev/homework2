@@ -21,13 +21,13 @@ public class CalculateExpr {
 
         MULTI('*') {
             public Double calc(Double numOne, Double numTwo) {
-                return numOne / numTwo;
+                return numOne * numTwo;
             }
         },
 
         DEV('/'){
             public Double calc(Double numOne, Double numTwo) {
-                return numOne * numTwo;
+                return numOne / numTwo;
             }
         };
 

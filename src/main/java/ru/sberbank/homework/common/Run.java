@@ -14,6 +14,7 @@ public class Run {
     private Scanner in  = new Scanner(System.in);
     private CheckValue checkValue = new CheckValue();
     private List<String> valuesOfExpr = new ArrayList<>();
+    private String fstElement, secElement, thirdElement;
 
     void run () {
         String input;
@@ -24,52 +25,74 @@ public class Run {
                 break;
             }
             if (valueStorage.getRunAtFirstTime()) {
-                valueStorage.setRunAtFirstTime(false);
                 runFirstTime(input);
+                valueStorage.setRunAtFirstTime(false);
             } else {
                 runSecondTime(input);
             }
         }
     }
 
-    void runFirstTime(String input) {
-        valuesOfExpr = checkValue.checkFirstExpression(input);
-        if (!(valuesOfExpr.get(0).matches("error.*"))) {
-            numOne = checkType(valuesOfExpr.get(0)).check();
-            numTwo = checkType(valuesOfExpr.get(2)).check();
-            mathOper = valuesOfExpr.get(1).charAt(0);
+    private void assignValues() {
+        fstElement = null;
+        secElement = null;
+        thirdElement = null;
 
-            valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
-            System.out.println(valuesOfExpr.get(0) + valuesOfExpr.get(1) +
-                    valuesOfExpr.get(2) + "=" + valueStorage.getResult());
-        } else {
-            System.out.println(valuesOfExpr.get(0));
+        fstElement = valuesOfExpr.get(0);
+
+        if (valuesOfExpr.size() > 1) {
+            secElement = valuesOfExpr.get(1);
+        }
+
+        if (valuesOfExpr.size() > 2) {
+            thirdElement = valuesOfExpr.get(2);
         }
     }
 
-    void runSecondTime(String input) {
+    private void runFirstTime(String input) {
+        valuesOfExpr = checkValue.checkFirstExpression(input);
+        assignValues();
+        if (!(fstElement.matches("error.*"))) {
+            numOne = checkType(fstElement).check();
+            numTwo = checkType(thirdElement).check();
+            mathOper = secElement.charAt(0);
+
+            valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
+            System.out.println(fstElement + secElement +
+                    thirdElement + "=" + valueStorage.getResult());
+        } else {
+            System.out.println(fstElement);
+        }
+    }
+
+    private void runSecondTime(String input) {
         Double oldValueStorage;
 
         if (input.matches(" ?[*/+\\-].*")) {
             valuesOfExpr = checkValue.checkSecondExpression(input);
-            if (!(valuesOfExpr.get(0).matches("error.*"))) {
-                numOne = checkType(valuesOfExpr.get(1)).check();
-                mathOper = valuesOfExpr.get(0).charAt(0);
-                oldValueStorage = valueStorage.getResult();
-                valueStorage.setResult(expr(mathOper).calc(numOne,valueStorage.getResult()));
-                System.out.println(oldValueStorage + valuesOfExpr.get(0) +
-                        valuesOfExpr.get(1) + "=" + valueStorage.getResult());
-            } else {
-                System.out.println(valuesOfExpr.get(0));
-            }
+            assignValues();
         }
-        else {
+
+        if ((fstElement != null) && (!fstElement.matches("error.*"))) {
+            numOne = checkType(secElement).check();
+            mathOper = fstElement.charAt(0);
+            oldValueStorage = valueStorage.getResult();
+            valueStorage.setResult(expr(mathOper).calc(valueStorage.getResult(),numOne));
+            System.out.println(oldValueStorage + fstElement +
+            secElement + "=" + valueStorage.getResult());
+        }
+
+        if ((fstElement.matches("error.*"))) {
+            System.out.println(valuesOfExpr.get(0));
+        }
+
+        if (!input.matches(" ?[*/+\\-].*")) {
             runFirstTime(input);
         }
     }
 
 //ENUM
-    CalculateExpr.Operation expr (char mathOper) {
+    private CalculateExpr.Operation expr (char mathOper) {
         for (CalculateExpr.Operation operation:CalculateExpr.Operation.values()) {
             if (operation.symbol == mathOper) {
                 return operation;
@@ -79,7 +102,7 @@ public class Run {
     }
 
 
-    static VerifyType checkType(String num) {
+    private static VerifyType checkType(String num) {
         if (num.matches("\\d+\\.?\\d*[fF]$")) {
             return new CheckTypeFloat(num);
         }
