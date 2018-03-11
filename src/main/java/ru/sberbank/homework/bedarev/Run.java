@@ -1,34 +1,35 @@
-package ru.sberbank.homework.common;
-import ru.sberbank.homework.common.calculate.*;
-import ru.sberbank.homework.common.checktype.*;
+package ru.sberbank.homework.bedarev;
+import ru.sberbank.homework.bedarev.checktype.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Run {
-    private Double numOne;
-    private Double numTwo;
+    private Double firstOperand;
     private char mathOper;
     private ValueStorage valueStorage = new ValueStorage(); //Класс хранения результата и вычислений
     private Scanner in  = new Scanner(System.in);
-    private CheckValue checkValue = new CheckValue();
+    private ValueChecker valueChecker = new ValueChecker();
     private List<String> valuesOfExpr = new ArrayList<>();
     private String fstElement, secElement, thirdElement;
 
     void run () {
         String input;
 
-        for (; ;) {
+        while (true) {
             input = in.nextLine();
             if (input.equals("")) {
                 break;
             }
+
+            if (!valueStorage.getRunAtFirstTime()){
+                runNextTime(input);
+            }
+
             if (valueStorage.getRunAtFirstTime()) {
                 runFirstTime(input);
                 valueStorage.setRunAtFirstTime(false);
-            } else {
-                runSecondTime(input);
             }
         }
     }
@@ -39,25 +40,24 @@ public class Run {
         thirdElement = null;
 
         fstElement = valuesOfExpr.get(0);
-
         if (valuesOfExpr.size() > 1) {
             secElement = valuesOfExpr.get(1);
         }
-
         if (valuesOfExpr.size() > 2) {
             thirdElement = valuesOfExpr.get(2);
         }
     }
 
     private void runFirstTime(String input) {
-        valuesOfExpr = checkValue.checkFirstExpression(input);
+        valuesOfExpr = valueChecker.checkBinaryOperation(input);
         assignValues();
+
         if (!(fstElement.matches("error.*"))) {
-            numOne = checkType(fstElement).check();
-            numTwo = checkType(thirdElement).check();
+            firstOperand = checkType(fstElement).check();
+            Double secOperand = checkType(thirdElement).check();
             mathOper = secElement.charAt(0);
 
-            valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
+            valueStorage.setResult(expr(mathOper).calc(firstOperand,secOperand));
             System.out.println(fstElement + secElement +
                     thirdElement + "=" + valueStorage.getResult());
         } else {
@@ -65,30 +65,31 @@ public class Run {
         }
     }
 
-    private void runSecondTime(String input) {
+    private void runNextTime(String input) {
         Double oldValueStorage;
 
-        if (input.matches(" ?[*/+\\-].*")) {
-            valuesOfExpr = checkValue.checkSecondExpression(input);
-            assignValues();
+        if (!input.matches("[*/+\\-] .*")) {
+            runFirstTime(input);
         }
 
-        if ((fstElement != null) && (!fstElement.matches("error.*"))) {
-            numOne = checkType(secElement).check();
+        if (input.matches("[*/+\\-] .*")) {
+            valuesOfExpr = valueChecker.checkUnaryOperation(input);
+        }
+
+        assignValues();
+        if ((!fstElement.matches("error.*")) && (input.matches(" ?[*/+\\-] .*"))) {
+            firstOperand = checkType(secElement).check();
             mathOper = fstElement.charAt(0);
             oldValueStorage = valueStorage.getResult();
-            valueStorage.setResult(expr(mathOper).calc(valueStorage.getResult(),numOne));
+            valueStorage.setResult(expr(mathOper).calc(valueStorage.getResult(), firstOperand));
             System.out.println(oldValueStorage + fstElement +
             secElement + "=" + valueStorage.getResult());
         }
 
-        if ((fstElement.matches("error.*"))) {
-            System.out.println(valuesOfExpr.get(0));
+        if ((fstElement.matches("error.*")) && (input.matches(" ?[*/+\\-] .*"))) {
+            System.out.println(fstElement);
         }
 
-        if (!input.matches(" ?[*/+\\-].*")) {
-            runFirstTime(input);
-        }
     }
 
 //ENUM
@@ -100,7 +101,6 @@ public class Run {
         }
         return CalculateExpr.Operation.PLUS;
     }
-
 
     private static VerifyType checkType(String num) {
         if (num.matches("\\d+\\.?\\d*[fF]$")) {

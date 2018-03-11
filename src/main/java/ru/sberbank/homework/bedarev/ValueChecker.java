@@ -1,15 +1,15 @@
-package ru.sberbank.homework.common;
+package ru.sberbank.homework.bedarev;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.ArrayList;
 
-public class CheckValue {
+public class ValueChecker {
 
-    public List<String> checkFirstExpression(String cmd) {
+    public List<String> checkBinaryOperation(String cmd) {
         String[] derrivedExpr = cmd.split(" ");
         List<String> valuesOfExpr = new ArrayList<>();
-        Pattern pattern3 = Pattern.
+        Pattern pattern = Pattern.
                 compile("^((?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]) ((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?$))");
 
 
@@ -29,15 +29,15 @@ public class CheckValue {
         }
 
         if (!derrivedExpr[2].matches("((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))")){
-            valuesOfExpr.add("error > " + derrivedExpr[1]);
+            valuesOfExpr.add("error > " + derrivedExpr[2]);
             return valuesOfExpr;
         }
 
-        valuesOfExpr = patternCheck(pattern3, cmd);
+        valuesOfExpr = patternCheck(pattern, cmd);
         return valuesOfExpr;
     }
 
-    public List<String> checkSecondExpression(String cmd) {
+    public List<String> checkUnaryOperation(String cmd) {
         List<String> valuesOfExpr = new ArrayList<>();
         String[] derrivedExpr = cmd.split(" ");
         Pattern pattern = Pattern.compile("^([*+\\-/]) ((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))$");

@@ -1,4 +1,4 @@
-package ru.sberbank.homework.common;
+package ru.sberbank.homework.bedarev;
 
 public class ValueStorage {
     private Double result;

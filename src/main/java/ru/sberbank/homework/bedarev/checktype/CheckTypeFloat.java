@@ -1,4 +1,4 @@
-package ru.sberbank.homework.common.checktype;
+package ru.sberbank.homework.bedarev.checktype;
 
 public class CheckTypeFloat implements VerifyType {
     String stringNum;
