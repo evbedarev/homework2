@@ -49,12 +49,12 @@ public class RunTest implements Calculator {
         }
     }
 
-    private boolean runSecondTime(String input) {
+    private void runSecondTime(String input) {
         Double oldValueStorage;
 
         if ((!input.matches("[*/+\\-] .*")) || (valueStorage.getResult() == null)) {
             runFirstTime(input);
-            return false;
+            return;
         }
 
         valuesOfExpr = valueChecker.checkUnaryOperation(input);
@@ -74,8 +74,6 @@ public class RunTest implements Calculator {
             valueStorage.setErrorInExpression(fstElement);
 
         }
-        return true;
-
     }
 
     private void assignValues() {

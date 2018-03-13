@@ -69,8 +69,7 @@ public class ValueChecker {
 
     }
 
-    //получает паттерн и колличество групп в паттерне, строку в которой будет производится поиск и сообщение ошибки
-    public List<String> patternCheck(Pattern pattern,  String cmd) {
+    private List<String> patternCheck(Pattern pattern,  String cmd) {
         List<String> executedValues = new ArrayList<>();
         String delUnderline;
         Matcher m = pattern.matcher(cmd);
