@@ -49,19 +49,18 @@ public class RunTest implements Calculator {
         }
     }
 
-    private void runSecondTime(String input) {
+    private boolean runSecondTime(String input) {
         Double oldValueStorage;
 
-        if (!input.matches("[*/+\\-] .*")) {
+        if ((!input.matches("[*/+\\-] .*")) || (valueStorage.getResult() == null)) {
             runFirstTime(input);
+            return false;
         }
 
-        if (input.matches("[*/+\\-] .*")) {
-            valuesOfExpr = valueChecker.checkUnaryOperation(input);
-            assignValues();
-        }
+        valuesOfExpr = valueChecker.checkUnaryOperation(input);
+        assignValues();
 
-        if ((!fstElement.matches("error.*")) && (input.matches(" ?[*/+\\-] .*"))) {
+        if ((!fstElement.matches("error.*")) && (input.matches("[*/+\\-] .*"))) {
             firstOperand = checkType(secElement).check();
             mathOper = fstElement.charAt(0);
             oldValueStorage = valueStorage.getResult();
@@ -70,11 +69,12 @@ public class RunTest implements Calculator {
                     secElement + "=" + valueStorage.getResult());
         }
 
-        if ((fstElement.matches("error.*")) && (input.matches(" ?[*/+\\-] .*"))) {
+        if ((fstElement.matches("error.*")) && (input.matches("[*/+\\-] .*"))) {
             System.out.println(fstElement);
             valueStorage.setErrorInExpression(fstElement);
 
         }
+        return true;
 
     }
 
@@ -104,19 +104,19 @@ public class RunTest implements Calculator {
     }
 
     private static VerifyType checkType(String num) {
-        if (num.matches("\\d+\\.\\d+[d]?$")) {
+        if (num.matches("^[+\\-]?\\d+\\.\\d+[d]?$")) {
             return new CheckTypeDouble(num);
         }
-        if (num.matches("\\d+\\.?\\d*[f]$")) {
+        if (num.matches("^[+\\-]?\\d+\\.?\\d*[f]$")) {
             return new CheckTypeFloat(num);
         }
-        if (num.matches("^0[0-7]+$")) {
+        if (num.matches("^[+\\-]?0[0-7]+$")) {
             return new CheckTypeOcta(num);
         }
-        if (num.matches("^0b[0-1]+$")) {
+        if (num.matches("^[+\\-]?0b[0-1]+$")) {
             return new CheckTypeBin(num);
         }
-        if (num.matches("^0x[0-9a-f]+$")) {
+        if (num.matches("^[+\\-]?0x[0-9a-f]+$")) {
             return new CheckTypeHex(num);
         }
         if (num.matches("^.*[l]$")) {
@@ -126,21 +126,3 @@ public class RunTest implements Calculator {
     }
 
 }
-
-
-
-//
-//    public String calculate (String userInput) {
-//            valueStorage.setErrorInExpression(null);
-//            if (valueStorage.getRunAtFirstTime()) {
-//                valueStorage.setRunAtFirstTime(false);
-//                runFirstTime(userInput);
-//            } else {runSecondTime(userInput);}
-//
-//            if (valueStorage.getErrorInExpression()==null) {
-//                return checkValue.checkZeroAtTheEnd(valueStorage.getResult().toString());
-//            } else {
-//                return valueStorage.getErrorInExpression();
-//            }
-//    }
-

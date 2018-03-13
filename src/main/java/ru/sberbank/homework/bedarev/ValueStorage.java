@@ -1,7 +1,7 @@
 package ru.sberbank.homework.bedarev;
 
 public class ValueStorage {
-    private Double result;
+    private  Double result;
     private boolean runAtFirstTime = true;
     private String errorInExpression = null;
 
@@ -10,7 +10,7 @@ public class ValueStorage {
    }
 
    public void setResult (Double result) {
-       this.result=result;
+       this.result =result;
    }
 
    public void setRunAtFirstTime(boolean runAtFirstTime) {

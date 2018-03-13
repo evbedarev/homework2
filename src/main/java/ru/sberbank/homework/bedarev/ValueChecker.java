@@ -6,33 +6,41 @@ import java.util.ArrayList;
 
 public class ValueChecker {
 
+    private final static String OPERAND_PATTERN = "((?:[-+])?(?:(?:0[0-7_]+)|" +
+            "(?:0b[0-1][0-1_]*)|" +
+            "(?:0x[0-9a-f][0-9a-f_]*)|" +
+            "(?:[0-9])|" +
+            "(?:[1-9][\\d_]*[\\d])|" +
+            "(?:\\d.\\d)|" +
+            "(?:\\d(?:[\\d_]*\\d)*\\.\\d(?:[\\d_]*\\d)*))(?:[lfd])?)";
+
+    private final static String OPERATOR_PATTERN = "([*+\\-/])";
+
+
     public List<String> checkBinaryOperation(String cmd) {
         String[] derrivedExpr = cmd.split(" ");
         List<String> valuesOfExpr = new ArrayList<>();
         Pattern pattern = Pattern.
-                compile("^(?i)((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?) " +
-                        "([*+\\-/]) " +
-                        "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)");
+                compile("(?i)^" + OPERAND_PATTERN + " " + OPERATOR_PATTERN + " " + OPERAND_PATTERN + "$");
 
 
-        if (!cmd.matches(".* [*+\\-/] .*")) {
+        if (!cmd.matches("[^ ]* " + OPERATOR_PATTERN + " [^ ]*")) {
             valuesOfExpr.add("error > wrong expression");
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[0].matches("(?i)" +
-                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")){
+
+        if (!derrivedExpr[0].matches("(?i)^" + OPERAND_PATTERN + "$")){
             valuesOfExpr.add("error > " + derrivedExpr[0]);
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[1].matches("([*+\\-/])")){
+        if (!derrivedExpr[1].matches("(?i)^" + OPERATOR_PATTERN + "$")){
             valuesOfExpr.add("error > " + derrivedExpr[1]);
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[2].matches("(?i)" +
-                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")){
+        if (!derrivedExpr[2].matches("(?i)^" + OPERAND_PATTERN + "$")){
             valuesOfExpr.add("error > " + derrivedExpr[2]);
             return valuesOfExpr;
         }
@@ -44,15 +52,14 @@ public class ValueChecker {
     public List<String> checkUnaryOperation(String cmd) {
         List<String> valuesOfExpr = new ArrayList<>();
         String[] derrivedExpr = cmd.split(" ");
-        Pattern pattern = Pattern.compile("^(?i)([*+\\-/]) " +
-                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)$");
+        Pattern pattern = Pattern.compile("(?i)^" + OPERATOR_PATTERN + " " + OPERAND_PATTERN + "$");
 
         if (!cmd.matches("[*+\\-/] .*")) {
             valuesOfExpr.add("error > wrong expression");
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[1].matches("(?i)((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")) {
+        if (!derrivedExpr[1].matches("(?i)" + OPERAND_PATTERN)) {
             valuesOfExpr.add("error > " + derrivedExpr[1]);
             return valuesOfExpr;
         }
