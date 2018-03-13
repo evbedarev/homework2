@@ -12,7 +12,7 @@ public class CheckTypeBin extends CheckTypeFloat {
     }
 
     public Double check() {
-        stringNum = valueChecker.patternCheck(Pattern.compile("0b([01]+)"), stringNum).get(0);
-        return isMaxValue(Long.parseLong(stringNum,2));
+        String replace0b = stringNum.replace("0b","");
+        return isMaxValue(Long.parseLong(replace0b ,2));
     }
 }
