@@ -1,18 +1,22 @@
 package ru.sberbank.homework.checker;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor // Почему-то его недостаточно
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @ToString
 public class Expression {
     private final String input;
     private final String expectedOutput;
-    private boolean isFailed;
+    private boolean failed;
+    @Setter
+    private CommandSequence parent;
 
-    public Expression fail() {
-        isFailed = true;
-        return this;
+    public void fail() {
+        failed = true;
+        parent.fail();
     }
 }

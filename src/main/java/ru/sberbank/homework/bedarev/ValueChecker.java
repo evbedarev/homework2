@@ -10,7 +10,9 @@ public class ValueChecker {
         String[] derrivedExpr = cmd.split(" ");
         List<String> valuesOfExpr = new ArrayList<>();
         Pattern pattern = Pattern.
-                compile("^((?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)) ([*+\\-/]) ((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?$))");
+                compile("^(?i)((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?) " +
+                        "([*+\\-/]) " +
+                        "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)");
 
 
         if (!cmd.matches(".* [*+\\-/] .*")) {
@@ -18,7 +20,8 @@ public class ValueChecker {
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[0].matches("((?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))")){
+        if (!derrivedExpr[0].matches("(?i)" +
+                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")){
             valuesOfExpr.add("error > " + derrivedExpr[0]);
             return valuesOfExpr;
         }
@@ -28,7 +31,8 @@ public class ValueChecker {
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[2].matches("((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))")){
+        if (!derrivedExpr[2].matches("(?i)" +
+                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")){
             valuesOfExpr.add("error > " + derrivedExpr[2]);
             return valuesOfExpr;
         }
@@ -40,14 +44,15 @@ public class ValueChecker {
     public List<String> checkUnaryOperation(String cmd) {
         List<String> valuesOfExpr = new ArrayList<>();
         String[] derrivedExpr = cmd.split(" ");
-        Pattern pattern = Pattern.compile("^([*+\\-/]) ((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))$");
+        Pattern pattern = Pattern.compile("^(?i)([*+\\-/]) " +
+                "((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)$");
 
         if (!cmd.matches("[*+\\-/] .*")) {
             valuesOfExpr.add("error > wrong expression");
             return valuesOfExpr;
         }
 
-        if (!derrivedExpr[1].matches("((?:0[0-7]+$)|(?:0b[0-1]+$)|(?:0x[0-9a-fA-F]+$)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))")) {
+        if (!derrivedExpr[1].matches("(?i)((?:[-+])?(?:(?:0[0-7_]+)|(?:0b[0-1_]+)|(?:0x[0-9a-f_]+)|(?:[\\d_]+\\.?[\\d_]*))(?:[lfd])?)")) {
             valuesOfExpr.add("error > " + derrivedExpr[1]);
             return valuesOfExpr;
         }
@@ -60,19 +65,27 @@ public class ValueChecker {
     //получает паттерн и колличество групп в паттерне, строку в которой будет производится поиск и сообщение ошибки
     public List<String> patternCheck(Pattern pattern,  String cmd) {
         List<String> executedValues = new ArrayList<>();
+        String delUnderline;
         Matcher m = pattern.matcher(cmd);
 
         if (m.find()) {
             for (int i=1; i<=m.groupCount(); i++) {
-                executedValues.add(m.group(i));
+                delUnderline = m.group(i).toLowerCase().replace("_","");
+                executedValues.add(delUnderline);
             }
         }
         return executedValues;
     }
 
     public String checkZeroAtTheEnd(String input) {
-        if (input.matches("\\d+.0")) {
-            return input.substring(0, input.length() - 2);
-        } else return input;
+        if (input.matches("[+-]?\\d+.00")) {
+            return input.substring(0, input.length() - 3);
+        }
+        if (input.matches("[+-]?\\d+.\\d+0")) {
+            return input.substring(0, input.length() - 1);
+        }
+
+        return input;
+
     }
 }

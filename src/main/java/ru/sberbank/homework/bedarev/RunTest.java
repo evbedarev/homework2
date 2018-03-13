@@ -1,5 +1,6 @@
 package ru.sberbank.homework.bedarev;
 import ru.sberbank.homework.bedarev.checktype.*;
+import ru.sberbank.homework.common.Calculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,8 @@ public class RunTest implements Calculator {
         }
 
         if (valueStorage.getErrorInExpression()==null) {
-            return valueChecker.checkZeroAtTheEnd(valueStorage.getResult().toString());
+            String formatResult = String.format("%.2f", valueStorage.getResult());
+            return valueChecker.checkZeroAtTheEnd(formatResult);
         } else {
             return valueStorage.getErrorInExpression();
         }
@@ -102,7 +104,10 @@ public class RunTest implements Calculator {
     }
 
     private static VerifyType checkType(String num) {
-        if (num.matches("\\d+\\.?\\d*[fF]$")) {
+        if (num.matches("\\d+\\.\\d+[d]?$")) {
+            return new CheckTypeDouble(num);
+        }
+        if (num.matches("\\d+\\.?\\d*[f]$")) {
             return new CheckTypeFloat(num);
         }
         if (num.matches("^0[0-7]+$")) {
@@ -111,10 +116,10 @@ public class RunTest implements Calculator {
         if (num.matches("^0b[0-1]+$")) {
             return new CheckTypeBin(num);
         }
-        if (num.matches("^0x[0-9a-fA-F]+$")) {
+        if (num.matches("^0x[0-9a-f]+$")) {
             return new CheckTypeHex(num);
         }
-        if (num.matches("^.*[lL]$")) {
+        if (num.matches("^.*[l]$")) {
             return new CheckTypeLong(num);
         }
         return new CheckTypeNum(num);

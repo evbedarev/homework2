@@ -1,4 +1,4 @@
-package ru.sberbank.homework.bedarev;
+package ru.sberbank.homework.common;
 
 /**
  * Вот такой простой интерфейс
