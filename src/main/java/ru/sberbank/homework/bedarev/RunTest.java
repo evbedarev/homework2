@@ -92,13 +92,13 @@ public class RunTest implements Calculator {
     }
 
     //ENUM
-    private CalculateExpr.Operation expr (char mathOper) {
-        for (CalculateExpr.Operation operation:CalculateExpr.Operation.values()) {
+    private Operation expr (char mathOper) {
+        for (Operation operation:Operation.values()) {
             if (operation.symbol == mathOper) {
                 return operation;
             }
         }
-        return CalculateExpr.Operation.PLUS;
+        return Operation.PLUS;
     }
 
     private static VerifyType checkType(String num) {
